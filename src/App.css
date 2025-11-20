@@ -1,0 +1,445 @@
+/* ================= 1. 核心重置 ================= */
+:root {
+  --primary: #4f46e5;
+  --bg-body: #f3f4f6;
+  --bg-card: #ffffff;
+  --text-main: #1f2937;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --radius: 12px;
+
+  /* 定义标准内容宽度，确保上下对齐 */
+  --content-width: 1024px;
+  --nav-height: 64px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 强制覆盖可能存在的默认样式 */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: var(--bg-body);
+  width: 100vw;
+  overflow-x: hidden;
+  /* 防止横向滚动条 */
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: block;
+  /* 确保不是 flex */
+}
+
+/* ================= 2. 导航栏 (Fixed 置顶) ================= */
+.navbar {
+  position: fixed;
+  /* 强制固定在窗口最上方 */
+  top: 0;
+  left: 0;
+  right: 0;
+  /* 确保横向铺满 */
+  height: var(--nav-height);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.nav-content {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  /* 居中 */
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+}
+
+/* ================= 3. 主体布局 ================= */
+.layout-container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  /* 居中，与 nav-content 对齐 */
+  padding: 0 20px;
+
+  /* 因为 navbar 是 fixed，所以这里要加 padding-top 把内容顶下来 */
+  padding-top: calc(var(--nav-height) + 24px);
+  padding-bottom: 40px;
+
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  /* 左 300px，右自适应 */
+  gap: 24px;
+  align-items: start;
+}
+
+/* ================= 4. 左侧栏 (Sidebar) ================= */
+.sidebar {
+  /* 因为 navbar 是 fixed，top 值要设为导航栏高度 + 间距 */
+  position: sticky;
+  top: calc(var(--nav-height) + 24px);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* 输入框美化 */
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  margin-bottom: 12px;
+  background: #f9fafb;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+textarea:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-count {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+
+.btn-submit {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin-bottom: 10px;
+}
+
+.info-row a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ================= 5. 右侧内容 ================= */
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  height: 40px;
+}
+
+.tabs {
+  display: flex;
+  gap: 24px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  cursor: pointer;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--text-main);
+  border-bottom-color: var(--primary);
+}
+
+/* 消息卡片 */
+.message-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.message-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  border-color: #d1d5db;
+}
+
+.card-header {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+}
+
+.sender-addr {
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.badge-admin {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.badge-me {
+  background: #e0e7ff;
+  color: var(--primary);
+  border: 1px solid #c7d2fe;
+}
+
+.msg-time {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+
+.card-content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #374151;
+  padding-left: 54px;
+  /* 对齐名字 */
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ================= 6. 杂项 ================= */
+.btn-connect {
+  background: var(--text-main);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-connect:hover {
+  background: #000;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.avatar-small {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, -100px);
+  background: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.toast-container.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* ================= 7. 移动端适配 ================= */
+@media (max-width: 800px) {
+  .layout-container {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    padding-top: calc(var(--nav-height) + 16px);
+    /* 移动端 padding */
+  }
+
+  .nav-content {
+    padding: 0 16px;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .card-content {
+    padding-left: 0;
+  }
+}
+
+/* 1. 按钮容器：胶囊形状，极简风格 */
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* 图标和文字的间距 */
+  height: 32px;
+  padding: 0 14px;
+
+  background-color: #fff;
+  border: 1px solid var(--border);
+  /* 浅灰边框 */
+  border-radius: 20px;
+  /* 圆润的胶囊圆角 */
+
+  color: var(--text-sub);
+  /* 默认深灰色 */
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* 2. 悬停状态 (Hover)：变为主色调 */
+.btn-refresh:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: var(--primary);
+  background-color: #eef2ff;
+  /* 极淡的蓝色背景 */
+  transform: translateY(-1px);
+  /* 微微上浮 */
+  box-shadow: 0 2px 5px rgba(79, 70, 229, 0.1);
+}
+
+/* 3. 点击状态 (Active) */
+.btn-refresh:active:not(:disabled) {
+  transform: translateY(0);
+  background-color: #e0e7ff;
+}
+
+/* 4. 禁用/加载状态 */
+.btn-refresh:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  background-color: #f9fafb;
+}
+
+/* 5. 图标旋转动画 (配合 JSX 中的 spinning 类) */
+.btn-refresh .icon {
+  display: inline-block;
+  font-size: 1rem;
+  transition: transform 0.5s;
+}
+
+/* 当有 spinning 类时，让图标一直转 */
+.btn-refresh.spinning .icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
